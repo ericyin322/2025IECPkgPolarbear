@@ -1,5 +1,5 @@
 import './style.css'
-import { Game } from "./game";
+import { GameEngine } from "./gameEngine";
 
-const game = new Game();
+const game = new GameEngine();
 game.init();
