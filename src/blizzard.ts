@@ -142,9 +142,9 @@ export class Blizzard {
       t: 0
     };
 
-    function setMode(m) { state.mode = m; state.t = 0; }
+    function setMode(m:any) { state.mode = m; state.t = 0; }
 
-    function update(dt) {
+    function update(dt:any) {
       state.t += dt;
       // basic leg swing
       const swing = Math.sin(state.t * 8) * 0.4;
@@ -163,7 +163,8 @@ export class Blizzard {
         head.rotation.x = THREE.MathUtils.lerp(head.rotation.x, -0.3, 0.2);
       } else if (state.mode === 'success') {
         // celebratory head nod
-        head.rotation.x = Math.sin(state.t * 6) * 0.25;
+        head.rotation.z = Math.sin(state.t * 6) * 0.25;
+        bear.position.y = THREE.MathUtils.lerp(bear.position.y, -0.5, 0.2);
       } else if (state.mode === 'fail') {
         // disappointed head shake
         head.rotation.y = Math.sin(state.t * 8) * 0.25;
@@ -178,116 +179,116 @@ export class Blizzard {
     return { group: bear, setMode, update, state };
   }
 
-  private makeSealx() {
-    const seal = new THREE.Group();
+  // private makeSealx() {
+  //   const seal = new THREE.Group();
 
 
-    // ===== Materials =====
-    const bodyMat = new THREE.MeshStandardMaterial({ color: 0x8895a7 });
-    const bodyMat2 = new THREE.MeshStandardMaterial({ color: 0x93a2b1 });
-    const headMat = new THREE.MeshStandardMaterial({ color: 0x9aa8b8 });
-    const darkMat = new THREE.MeshStandardMaterial({ color: 0x111111 });
-    const finMat = new THREE.MeshStandardMaterial({ color: 0x91a2b3 });
-    // ===== Body (two capsules) =====
-    // Rear section
-    const rear = new THREE.Mesh(new THREE.CapsuleGeometry(0.9, 1.4, 6, 12), bodyMat);
-    rear.rotation.z = Math.PI / 2; // align along X
-    rear.position.x = -0.6;
-    rear.castShadow = rear.receiveShadow = true; seal.add(rear);
+  //   // ===== Materials =====
+  //   const bodyMat = new THREE.MeshStandardMaterial({ color: 0x8895a7 });
+  //   const bodyMat2 = new THREE.MeshStandardMaterial({ color: 0x93a2b1 });
+  //   const headMat = new THREE.MeshStandardMaterial({ color: 0x9aa8b8 });
+  //   const darkMat = new THREE.MeshStandardMaterial({ color: 0x111111 });
+  //   const finMat = new THREE.MeshStandardMaterial({ color: 0x91a2b3 });
+  //   // ===== Body (two capsules) =====
+  //   // Rear section
+  //   const rear = new THREE.Mesh(new THREE.CapsuleGeometry(0.9, 1.4, 6, 12), bodyMat);
+  //   rear.rotation.z = Math.PI / 2; // align along X
+  //   rear.position.x = -0.6;
+  //   rear.castShadow = rear.receiveShadow = true; seal.add(rear);
 
 
-    // Front section (slightly slimmer, overlaps to form smooth body)
-    const front = new THREE.Mesh(new THREE.CapsuleGeometry(0.8, 1.2, 6, 12), bodyMat2);
-    front.rotation.z = Math.PI / 2;
-    front.position.x = 0.7;
-    front.castShadow = front.receiveShadow = true; seal.add(front);
+  //   // Front section (slightly slimmer, overlaps to form smooth body)
+  //   const front = new THREE.Mesh(new THREE.CapsuleGeometry(0.8, 1.2, 6, 12), bodyMat2);
+  //   front.rotation.z = Math.PI / 2;
+  //   front.position.x = 0.7;
+  //   front.castShadow = front.receiveShadow = true; seal.add(front);
 
 
-    // ===== Head =====
-    const head = new THREE.Mesh(new THREE.SphereGeometry(0.52, 20, 16), headMat);
-    head.position.set(1.8, 0.2, 0);
-    head.castShadow = true; seal.add(head);
-    // Nose (snout tip)
-    const nose = new THREE.Mesh(new THREE.SphereGeometry(0.12, 12, 10), darkMat);
-    nose.position.set(2.15, 0.18, 0);
-    nose.castShadow = true; seal.add(nose);
+  //   // ===== Head =====
+  //   const head = new THREE.Mesh(new THREE.SphereGeometry(0.52, 20, 16), headMat);
+  //   head.position.set(1.8, 0.2, 0);
+  //   head.castShadow = true; seal.add(head);
+  //   // Nose (snout tip)
+  //   const nose = new THREE.Mesh(new THREE.SphereGeometry(0.12, 12, 10), darkMat);
+  //   nose.position.set(2.15, 0.18, 0);
+  //   nose.castShadow = true; seal.add(nose);
 
 
-    // Eyes
-    const eyeL = new THREE.Mesh(new THREE.SphereGeometry(0.08, 10, 10), darkMat);
-    eyeL.position.set(1.95, 0.32, 0.18); seal.add(eyeL);
-    const eyeR = eyeL.clone(); eyeR.position.z = -0.18; seal.add(eyeR);
+  //   // Eyes
+  //   const eyeL = new THREE.Mesh(new THREE.SphereGeometry(0.08, 10, 10), darkMat);
+  //   eyeL.position.set(1.95, 0.32, 0.18); seal.add(eyeL);
+  //   const eyeR = eyeL.clone(); eyeR.position.z = -0.18; seal.add(eyeR);
 
 
-    // Whiskers (3 per side)
-    function makeWhisker() {
-      const g = new THREE.CylinderGeometry(0.01, 0.01, 0.7, 6);
-      const m = darkMat;
-      const w = new THREE.Mesh(g, m);
-      w.rotation.z = Math.PI / 2; // lay along X
-      w.castShadow = true; return w;
-    }
-    const whiskerGroup = new THREE.Group();
-    const offsets = [-0.08, 0.0, 0.08];
-    offsets.forEach((dy, i) => {
-      const wL = makeWhisker();
-      wL.position.set(2.02, 0.15 + dy, 0.24);
-      wL.rotation.y = 0.12; whiskerGroup.add(wL);
-      const wR = makeWhisker();
-      wR.position.set(2.02, 0.15 + dy, -0.24);
-      wR.rotation.y = -0.12; whiskerGroup.add(wR);
-    });
-    seal.add(whiskerGroup);
-    // Mouth hint (tiny inverted cone under nose)
-    const mouth = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.08, 10), darkMat);
-    mouth.rotation.x = Math.PI; mouth.position.set(2.12, 0.08, 0);
-    seal.add(mouth);
+  //   // Whiskers (3 per side)
+  //   function makeWhisker() {
+  //     const g = new THREE.CylinderGeometry(0.01, 0.01, 0.7, 6);
+  //     const m = darkMat;
+  //     const w = new THREE.Mesh(g, m);
+  //     w.rotation.z = Math.PI / 2; // lay along X
+  //     w.castShadow = true; return w;
+  //   }
+  //   const whiskerGroup = new THREE.Group();
+  //   const offsets = [-0.08, 0.0, 0.08];
+  //   offsets.forEach((dy, i) => {
+  //     const wL = makeWhisker();
+  //     wL.position.set(2.02, 0.15 + dy, 0.24);
+  //     wL.rotation.y = 0.12; whiskerGroup.add(wL);
+  //     const wR = makeWhisker();
+  //     wR.position.set(2.02, 0.15 + dy, -0.24);
+  //     wR.rotation.y = -0.12; whiskerGroup.add(wR);
+  //   });
+  //   seal.add(whiskerGroup);
+  //   // Mouth hint (tiny inverted cone under nose)
+  //   const mouth = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.08, 10), darkMat);
+  //   mouth.rotation.x = Math.PI; mouth.position.set(2.12, 0.08, 0);
+  //   seal.add(mouth);
 
 
-    // ===== Fins =====
-    const finL = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.06, 0.55), finMat);
-    finL.position.set(0.2, -0.22, 0.55); seal.add(finL);
-    const finR = finL.clone(); finR.position.z = -0.55; seal.add(finR);
+  //   // ===== Fins =====
+  //   const finL = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.06, 0.55), finMat);
+  //   finL.position.set(0.2, -0.22, 0.55); seal.add(finL);
+  //   const finR = finL.clone(); finR.position.z = -0.55; seal.add(finR);
 
 
-    // Tail fins
-    const tailL = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.06, 0.28), finMat);
-    tailL.position.set(-1.6, -0.1, 0.28); tailL.rotation.z = 0.35; seal.add(tailL);
-    const tailR = tailL.clone(); tailR.position.z = -0.28; tailR.rotation.z = -0.35; seal.add(tailR);
-    // ===== Simple animation states =====
-    const state = { mode: 'rest', t: 0 }; // 'alert'|'escape'|'caught'
-    function setMode(m) { state.mode = m; state.t = 0; }
-    function update(dt) {
-      state.t += dt;
-      if (state.mode === 'rest') {
-        head.position.y = 0.2 + Math.sin(state.t * 2) * 0.06;
-        whiskerGroup.rotation.y = Math.sin(state.t * 2) * 0.05;
-      } else if (state.mode === 'alert') {
-        head.position.y = THREE.MathUtils.lerp(head.position.y, 0.6, 0.2);
-        whiskerGroup.rotation.y = THREE.MathUtils.lerp(whiskerGroup.rotation.y, 0, 0.2);
-      } else if (state.mode === 'escape') {
-        // wiggle away quickly (X negative direction)
-        seal.position.x -= dt * 6.0;
-        head.position.y = 0.4 + Math.sin(state.t * 18) * 0.12;
-        finL.rotation.x = Math.sin(state.t * 12) * 0.4;
-        finR.rotation.x = -Math.sin(state.t * 12) * 0.4;
-      } else if (state.mode === 'caught') {
-        head.position.y = THREE.MathUtils.lerp(head.position.y, -0.1, 0.15);
-        seal.rotation.z = THREE.MathUtils.lerp(seal.rotation.z, -0.6, 0.1);
-      }
-    }
-    return { group: seal, setMode, update, state };
-  }
+  //   // Tail fins
+  //   const tailL = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.06, 0.28), finMat);
+  //   tailL.position.set(-1.6, -0.1, 0.28); tailL.rotation.z = 0.35; seal.add(tailL);
+  //   const tailR = tailL.clone(); tailR.position.z = -0.28; tailR.rotation.z = -0.35; seal.add(tailR);
+  //   // ===== Simple animation states =====
+  //   const state = { mode: 'rest', t: 0 }; // 'alert'|'escape'|'caught'
+  //   function setMode(m) { state.mode = m; state.t = 0; }
+  //   function update(dt) {
+  //     state.t += dt;
+  //     if (state.mode === 'rest') {
+  //       head.position.y = 0.2 + Math.sin(state.t * 2) * 0.06;
+  //       whiskerGroup.rotation.y = Math.sin(state.t * 2) * 0.05;
+  //     } else if (state.mode === 'alert') {
+  //       head.position.y = THREE.MathUtils.lerp(head.position.y, 0.6, 0.2);
+  //       whiskerGroup.rotation.y = THREE.MathUtils.lerp(whiskerGroup.rotation.y, 0, 0.2);
+  //     } else if (state.mode === 'escape') {
+  //       // wiggle away quickly (X negative direction)
+  //       seal.position.x -= dt * 6.0;
+  //       head.position.y = 0.4 + Math.sin(state.t * 18) * 0.12;
+  //       finL.rotation.x = Math.sin(state.t * 12) * 0.4;
+  //       finR.rotation.x = -Math.sin(state.t * 12) * 0.4;
+  //     } else if (state.mode === 'caught') {
+  //       head.position.y = THREE.MathUtils.lerp(head.position.y, -0.1, 0.15);
+  //       seal.rotation.z = THREE.MathUtils.lerp(seal.rotation.z, -0.6, 0.1);
+  //     }
+  //   }
+  //   return { group: seal, setMode, update, state };
+  // }
 
   makeSeal() {
     const seal = new THREE.Group();
     const gray = 0x8895a7;
 
-    const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.8, 1.6, 6, 12), new THREE.MeshStandardMaterial({ color: gray, transparent: true, opacity: 0.4 }));
+    const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.8, 1.6, 6, 12), new THREE.MeshStandardMaterial({ color: gray, transparent: false, opacity: 0.4 }));
     body.rotation.z = Math.PI / 2; body.castShadow = true;
     seal.add(body);
 
-    const head = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 12), new THREE.MeshStandardMaterial({ color: 0x9aa8b8, transparent: true, opacity: 0.4 }));
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 12), new THREE.MeshStandardMaterial({ color: 0x9aa8b8, transparent: false, opacity: 0.4 }));
     head.position.set(1.2, 0.2, 0); head.castShadow = true;
     seal.add(head);
 
@@ -300,21 +301,26 @@ export class Blizzard {
     head.add(eyeR);
 
     const finL = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.05, 0.5), new THREE.MeshStandardMaterial({ color: 0x91a2b3 }));
-    finL.position.set(0.2, -0.2, 0.5);
+    finL.position.set(0.2, -0.2, 1);
     seal.add(finL);
 
     const finR = finL.clone();
-    finR.position.z = -0.5;
+    finR.position.z = -1;
     seal.add(finR);
 
     // tail fins
     const tailL = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.05, 0.25), new THREE.MeshStandardMaterial({ color: 0x91a2b3 }));
-    tailL.position.set(-1.2, -0.1, 0.25); tailL.rotation.z = 0.3; seal.add(tailL);
-    const tailR = tailL.clone(); tailR.position.z = -0.25; tailR.rotation.z = -0.3; seal.add(tailR);
+    tailL.position.set(-1.5, -0.3, 0.25); 
+    tailL.rotation.z = 0.3; 
+    seal.add(tailL);
+    const tailR = tailL.clone(); 
+    tailR.position.z = -0.25; 
+    tailR.rotation.z = -0.3; 
+    seal.add(tailR);
 
     const state = { mode: 'rest', t: 0 };// 'alert'|'escape'|'caught'
-    function setMode(m) { state.mode = m; state.t = 0; }
-    function update(dt) {
+    function setMode(m:any) { state.mode = m; state.t = 0; }
+    function update(dt:any) {
       state.t += dt;
       if (state.mode === 'rest') {
         head.position.y = 0.2 + Math.sin(state.t * 2) * 0.5;
@@ -324,7 +330,7 @@ export class Blizzard {
         // wiggle away quickly (X negative direction)
         seal.position.z += dt * 6.0;
         head.position.y = 0.4 + Math.sin(state.t * 18) * 0.12;
-        seal.rotation.x = THREE.MathUtils.lerp(seal.rotation.z, -0.6, 0.1);
+        seal.rotation.x -= THREE.MathUtils.lerp(seal.rotation.z, -0.6, 0.1);
       } else if (state.mode === 'caught') {
         // slump
         head.position.y = THREE.MathUtils.lerp(head.position.y, -0.1, 0.15);
@@ -338,7 +344,7 @@ export class Blizzard {
     this.currentSeal = this.makeSeal();
     const aheadX = this.bear.group.position.x + 6 + Math.random() * 1.5;
     this.currentSeal.group.position.set(aheadX, 0.6, THREE.MathUtils.randFloatSpread(1.0));
-    this.currentSeal.group.rotation.y = Math.PI; // face bear
+    this.currentSeal.group.rotation.y = 0//-Math.PI; // face bear
     this.scene.add(this.currentSeal.group);
   }
 }

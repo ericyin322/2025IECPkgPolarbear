@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^7.1.7",
-    "typescript": "~5.9.3"
+    "@mediapipe/tasks-vision": "^0.10.21",
+    "@types/three": "^0.180.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.7"
   },
   "dependencies": {
     "three": "^0.180.0"

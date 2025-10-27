@@ -12,26 +12,30 @@
     <div class="pill">分數：<span id="score">0</span> / 5</div>
     <div class="pill">狀態：<span id="status">等待開始</span></div>
     <div class="pill">時間：<span id="time">0.0s</span></div>
+
+  </div>
+  <div id="ui-qus">
+    <div id="question"></div>
+    <div id="options"></div>
   </div>
   <div id="hint">遇到海豹！請在 <b>1 秒</b>內按下 <b>空白鍵</b>！</div>
   <div id="overlay">
     <div id="panel">
       <h1>Polar Bear Hunt</h1>
       <p id="summary" style="display:none; margin-top:10px; font-weight:700;"></p>
-      <p>北極熊在冰原漫步，偶爾會遇到海豹。遇到海豹時你必須在 <b>1 秒內</b> 按下 <b>空白鍵</b> 才能成功捕獲。</p>
-      <ul style="text-align:left; line-height:1.5; color:#345;">
-        <li>按下「Start Game」開始。</li>
-        <li>每次遇敵前會先漫步 3 秒。</li>
-        <li>成功吃到 5 隻海豹即結束並顯示總時間。</li>
-      </ul>
+      <p>北極熊在冰原漫步，偶爾會遇到海豹。</p><p>遇到海豹時你必須在 <b>5 秒內回答問題</b>  才能成功捕獲。</p>
+
       <button id="startBtn">Start Game</button>
-      
+
     </div>
   </div>
-
+  <!-- <div id="devArea">
+    <canvas id="output_canvas"></canvas>
+    <video id="input_video" autoplay playsinline></video>
+  </div> -->
   <script type="module" src="/src/main.ts">
 
-       
+
   </script>
 </body>
 
