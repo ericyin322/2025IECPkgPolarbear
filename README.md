@@ -2,6 +2,8 @@
 
 A browser-based 3D game built with [Three.js](https://threejs.org/) where a polar bear wanders across the ice. When it encounters a seal, you have a limited time to answer a question correctly to catch it.
 
+Live at https://ericyin322.github.io/2025IECPkgPolarbear/
+
 ## Gameplay
 
 - The bear roams a snowy 3D scene.
