@@ -115,7 +115,7 @@ html,
     .option.active {
       background: #b8f2bb;
     }
-    #ui-qus{
+    #ui-qus2{
       position: fixed;
       top: 100px;
       left: 0;
@@ -129,3 +129,19 @@ html,
       /* pointer-events: none; */
       text-shadow: 0 1px 0 #fff8;
     }
+
+    #ui-qus {
+    position: fixed;      /* 固定在視窗上，而不是跟著捲動的內容 */
+    left: 50%;            /* 水平位置到視窗 50% */
+    bottom: 20px;         /* 距離底部 20px，可依需求調整 */
+    transform: translateX(-50%); /* 往左移自身寬度的一半，達到水平置中 */
+
+    /* 以下是可選的美化 */
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 16px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.15);
+          z-index: 50;
+      /* pointer-events: none; */
+      text-shadow: 0 1px 0 #fff8;
+  }

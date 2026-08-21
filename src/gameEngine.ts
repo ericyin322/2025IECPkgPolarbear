@@ -52,7 +52,7 @@ export class GameEngine {
   }
 
   init() {
-    
+
     // await this.gesture.init();
     // Resize handler
     window.addEventListener('resize', () => {
@@ -99,6 +99,9 @@ export class GameEngine {
       this.blizzard.scene.remove(this.blizzard.currentSeal.group);
       this.blizzard.currentSeal = null;
     }
+    if (this.blizzard.santa != null) this.blizzard.santa.model.position.set(0, -1000, 0);
+    if (this.blizzard.oiiaioooooiai_cat != null) this.blizzard.oiiaioooooiai_cat.model.position.set(0, -1000, 0);
+    if (this.blizzard.fox != null) this.blizzard.fox.model.position.set(0, -1000, 0);
     this.blizzard.controls.target.set(0, 2, 0);
     this.blizzard.controls.update();
     this.qusuiEl.style.display = 'none';
@@ -110,7 +113,7 @@ export class GameEngine {
     this.overlayEl.style.display = 'none';
     this.Game.totalStart = performance.now();
     this.transitionToWalking();
-    await this.musicPlayer.load('/Tiburtina - Schwartzy.mp3');  // 若被瀏覽器阻擋，請在使用者點擊後再呼叫
+    await this.musicPlayer.load(`${import.meta.env.BASE_URL}Tiburtina - Schwartzy.mp3`);  // 若被瀏覽器阻擋，請在使用者點擊後再呼叫
     this.musicPlayer.resume()
   }
 
@@ -175,6 +178,21 @@ export class GameEngine {
       this.setMsg('捕獲成功！');
       this.blizzard.bear.setMode('success');
       this.blizzard.currentSeal.setMode('caught');
+
+      let bx = this.blizzard.bear.group.position.x;
+      let bz = this.blizzard.bear.group.position.z;
+      // this.blizzard.santa.model.position.set(bx - 10 + Math.random() * 20, 0, bz - 10 + Math.random() * 20);
+      if (this.Game.score == 2) {
+        this.blizzard.fox.model.position.set(bx + 10, 2, bz + 5 - Math.random() * 30)
+      }
+      if (this.Game.score == 3) {
+        this.blizzard.oiiaioooooiai_cat.model.position.set(bx + 10, 0, bz + 5 - Math.random() * 30)
+      }
+      if (this.Game.score == 4) {
+        this.blizzard.santa.model.position.set(bx + 10, 0, bz + 5 - Math.random() * 30)
+      }
+
+
     } else {
       this.setMsg('失敗！海豹逃走了…');
       this.blizzard.bear.setMode('fail');
@@ -206,11 +224,15 @@ export class GameEngine {
     this.Game.lastTime = now;
 
     this.blizzard.controls.update();
-
+    if (this.blizzard.santa != null) this.blizzard.santa.mixer.update(dt);
+    if (this.blizzard.taryk != null) this.blizzard.taryk.mixer.update(dt);
+    if (this.blizzard.fox != null) this.blizzard.fox.mixer.update(dt);
+    if (this.blizzard.bird_orange != null) this.blizzard.bird_orange.mixer.update(dt);
+    if (this.blizzard.oiiaioooooiai_cat != null) this.blizzard.oiiaioooooiai_cat.mixer.update(dt);
     // Update animals
     this.blizzard.bear.update(dt);
     if (this.blizzard.currentSeal) this.blizzard.currentSeal.update(dt);
-
+    this.blizzard.penguins.forEach((penguin: { update: (arg0: number) => void; }) => {penguin.update(dt) });
     // Update time display during active play
     if (['walking', 'encounter', 'window', 'resolve'].includes(this.Game.state)) {
       const elapsed = (now - this.Game.totalStart) / 1000;
